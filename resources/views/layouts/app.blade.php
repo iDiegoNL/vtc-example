@@ -10,6 +10,11 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    {{--
+        Usually I would handle the assets (CSS & JS) via Laravel Mix/webpack, however, since it was provided to me via a RAR file
+        with most files already "compiled", I decided to use the "raw" version of the files here. Don't blame me, blame JM. :ThisIsFine:
+     --}}
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
