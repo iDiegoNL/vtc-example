@@ -34,7 +34,7 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCompanyRequest  $request
+     * @param \App\Http\Requests\StoreCompanyRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCompanyRequest $request)
@@ -45,18 +45,18 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Company $company
+     * @return View
      */
-    public function show(Company $company)
+    public function show(Company $company): View
     {
-        //
+        return view('companies.show', ['company' => $company]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Company  $company
+     * @param \App\Models\Company $company
      * @return \Illuminate\Http\Response
      */
     public function edit(Company $company)
@@ -67,8 +67,8 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCompanyRequest  $request
-     * @param  \App\Models\Company  $company
+     * @param \App\Http\Requests\UpdateCompanyRequest $request
+     * @param \App\Models\Company $company
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateCompanyRequest $request, Company $company)
@@ -79,7 +79,7 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Company  $company
+     * @param \App\Models\Company $company
      * @return \Illuminate\Http\Response
      */
     public function destroy(Company $company)
