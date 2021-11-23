@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use App\Models\User;
 use DavidBadura\FakerMarkdownGenerator\FakerProvider as FakerMarkdownProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -52,5 +53,20 @@ class CompanyFactory extends Factory
 
         // Return the asset path
         return "storage/images/vtc/logo/$logo";
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return self
+     */
+    public function configure(): self
+    {
+        // After creating the company, set the owner's company_id.
+        return $this->afterCreating(function (Company $company) {
+            $company->owner()->update([
+                'company_id' => $company->id,
+            ]);
+        });
     }
 }
