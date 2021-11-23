@@ -31,7 +31,9 @@
                     </span>
                         <ul class="languages accountMenu hoverSelectorBlock">
                             <li><a href="#">Profile</a></li>
-                            <li><a href="#">My VTC</a></li>
+                            @if(Auth::user()->company()->exists())
+                                <li><a href="{{ route('vtc.show', Auth::user()->company_id) }}">My VTC</a></li>
+                            @endif
                             <li><a href="#">Settings</a></li>
                             <li><a href="#">Appeal Ban</a></li>
                             <li><a href="#">Reports</a></li>
@@ -80,7 +82,7 @@
 
 
                 <li>
-                    <a href="https://truckersmp.com/vtc">VTC</a>
+                    <a href="{{ route('vtc.index') }}">VTC</a>
                 </li>
 
 
