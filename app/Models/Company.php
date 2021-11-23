@@ -58,9 +58,9 @@ class Company extends Model
     }
 
     /**
-     * Get the users that are in the company.
+     * Get the members of the company.
      */
-    public function users(): HasMany
+    public function members(): HasMany
     {
         return $this->hasMany(User::class);
     }
