@@ -49,7 +49,7 @@ class CompanyFactory extends Factory
         }
 
         // Generate a random image, and store it
-        $logo = $this->faker->image($logoPath, 500, 500, null, false);
+        $logo = $this->faker->image($logoPath, 260, 260, null, false);
 
         // Return the asset path
         return "storage/images/vtc/logo/$logo";
