@@ -13,7 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Throwable;
 
-class CompanyController extends Controller
+class CompanyResourceController extends Controller
 {
     private LeaveCompanyAction $leaveCompanyAction;
 
