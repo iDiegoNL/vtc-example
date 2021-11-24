@@ -208,4 +208,29 @@
             </div>
         </div>
     </div>
+
+    @can('leave', $company)
+        <div class="modal fade" id="form-leave" tabindex="-1" role="dialog" aria-labelledby="Leave" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Are you sure you want to leave {{ $company->name }}?</h3>
+                    </div>
+                    <form action="{{ route('vtc.leave', $company->id) }}" method="POST">
+                        <div class="modal-body">
+                            @csrf
+                            <p>
+                                If you choose to <strong>leave</strong>, you will need to submit another application to
+                                <strong>re-join</strong> the virtual trucking company.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default ml-3" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Leave</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endcan
 @endsection

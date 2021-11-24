@@ -19,3 +19,6 @@ Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('vtc', CompanyController::class)->parameters(['vtc' => 'company']);
+Route::prefix('vtc/{company}')->name('vtc.')->group(function () {
+    Route::post('leave', [CompanyController::class, 'leave'])->middleware('auth')->name('leave');
+});

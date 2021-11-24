@@ -2,22 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\User\LeaveCompanyAction;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
+use Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Throwable;
 
 class CompanyController extends Controller
 {
+    private LeaveCompanyAction $leaveCompanyAction;
+
     /**
      * Create the controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(LeaveCompanyAction $leaveCompanyAction)
     {
         // Attach the CompanyPolicy methods to the controller resource methods
         $this->authorizeResource(Company::class, 'company');
+
+        $this->leaveCompanyAction = $leaveCompanyAction;
     }
 
     /**
@@ -35,7 +45,7 @@ class CompanyController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -46,7 +56,7 @@ class CompanyController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \App\Http\Requests\StoreCompanyRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(StoreCompanyRequest $request)
     {
@@ -56,7 +66,7 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Company $company
+     * @param Company $company
      * @return View
      */
     public function show(Company $company): View
@@ -67,8 +77,8 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Company $company
-     * @return \Illuminate\Http\Response
+     * @param Company $company
+     * @return Response
      */
     public function edit(Company $company)
     {
@@ -79,8 +89,8 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param \App\Http\Requests\UpdateCompanyRequest $request
-     * @param \App\Models\Company $company
-     * @return \Illuminate\Http\Response
+     * @param Company $company
+     * @return Response
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
@@ -90,11 +100,29 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Company $company
-     * @return \Illuminate\Http\Response
+     * @param Company $company
+     * @return Response
      */
     public function destroy(Company $company)
     {
         //
+    }
+
+    /**
+     * Leave the company.
+     *
+     * @param Company $company
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function leave(Company $company): RedirectResponse
+    {
+        // Check if the user is authorized to leave the company
+        $this->authorize('leave', $company);
+
+        $this->leaveCompanyAction->execute(Auth::user());
+
+        return back();
     }
 }
