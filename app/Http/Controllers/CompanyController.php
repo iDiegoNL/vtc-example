@@ -10,6 +10,17 @@ use Illuminate\Contracts\View\View;
 class CompanyController extends Controller
 {
     /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // Attach the CompanyPolicy methods to the controller resource methods
+        $this->authorizeResource(Company::class, 'company');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return View

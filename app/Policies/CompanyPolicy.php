@@ -5,67 +5,128 @@ namespace App\Policies;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class CompanyPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can view any companies.
+     * The `user` param here is made nullable, so that guests are also allowed to view companies.
      *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param User|null $user
+     * @return Response
      */
-    public function create(User $user)
+    public function viewAny(?User $user): Response
+    {
+        // Users & guests are always allowed to view any company
+        return Response::allow();
+    }
+
+    /**
+     * Determine whether the user can view the company.
+     * The `user` param here is made nullable, so that guests are also allowed to view a company.
+     *
+     * @param User|null $user
+     * @param Company $company
+     * @return Response
+     */
+    public function view(?User $user, Company $company): Response
+    {
+        // Users & guests are always allowed to view a company
+        return Response::allow();
+    }
+
+    /**
+     * Determine whether the user can view the company members.
+     * The `user` param here is made nullable, so that guests are also allowed to view company members.
+     *
+     * @param User|null $user
+     * @param Company $company
+     * @return bool
+     */
+    public function viewMembers(?User $user, Company $company): bool
+    {
+        return $company->display_members;
+    }
+
+    /**
+     * Determine whether the user can apply to the company.
+     *
+     * @param User $user
+     * @param Company $company
+     * @return Response
+     */
+    public function apply(User $user, Company $company): Response
+    {
+        // Check if the company is recruiting
+        if (!$company->recruitment_open) {
+            return Response::deny('This company is currently not recruiting.');
+        }
+
+        // Check if the user is already in a company
+        if ($user->company_id) {
+            return Response::deny('You are already in a company.');
+        }
+
+        return Response::allow();
+    }
+
+    /**
+     * Determine whether the user can create a company.
+     *
+     * @param User $user
+     * @return Response
+     */
+    public function create(User $user): Response
     {
         //
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update the company.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param User $user
+     * @param Company $company
+     * @return Response
      */
-    public function update(User $user, Company $company)
+    public function update(User $user, Company $company): Response
     {
         //
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can delete the company.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param User $user
+     * @param Company $company
+     * @return Response
      */
-    public function delete(User $user, Company $company)
+    public function delete(User $user, Company $company): Response
     {
         //
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can leave the company.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param User $user
+     * @param Company $company
+     * @return Response
      */
-    public function restore(User $user, Company $company)
+    public function leave(User $user, Company $company): Response
     {
-        //
-    }
+        // Check if the user is in the company
+        if ($user->company_id !== $company->id) {
+            return Response::deny('You cannot leave a company you are not a member of.');
+        }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(User $user, Company $company)
-    {
-        //
+        // Check if the user is the owner of the company
+        if ($company->owner_id === $user->id) {
+            return Response::deny('You cannot leave a company you are the owner of.');
+        }
+
+        return Response::allow();
     }
 }

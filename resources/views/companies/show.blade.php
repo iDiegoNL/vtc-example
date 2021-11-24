@@ -125,23 +125,29 @@
 
             <div class="col-md-3">
                 @auth
-                    @if($company->recruitment_open && !Auth::user()->company_id)
-                        <a href="#" class="btn btn-success w-100 margin-bottom-10" data-toggle="modal"
-                           data-target="#form-apply">Apply Now!</a>
-                    @elseif(Auth::user()->company_id !== $company->id)
+                    @if(Auth::user()->company_id && Auth::user()->company_id !== $company->id)
                         <x-alert type="danger">
                             You are already in a VTC.
                         </x-alert>
-                    @elseif(Auth::user()->company_id === $company->id)
-                        <a href="#" class="btn btn-danger w-100 margin-bottom-10" data-toggle="modal"
-                           data-target="#form-leave">
-                            <i class="fas fa-door-open"></i> Leave my VTC
-                        </a>
-                    @else
+                    @endif
+
+                    @if(!$company->recruitment_open)
                         <x-alert type="danger">
                             This VTC is not recruiting right now.
                         </x-alert>
                     @endif
+
+                    @can('apply', $company)
+                        <a href="#" class="btn btn-success w-100 margin-bottom-10" data-toggle="modal"
+                           data-target="#form-apply">Apply Now!</a>
+                    @endcan
+
+                    @can('leave', $company)
+                        <a href="#" class="btn btn-danger w-100 margin-bottom-10" data-toggle="modal"
+                           data-target="#form-leave">
+                            <i class="fas fa-door-open"></i> Leave my VTC
+                        </a>
+                    @endcan
                 @endauth
 
                 <div class="profile-body">
