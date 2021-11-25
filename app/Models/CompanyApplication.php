@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -44,5 +45,16 @@ class CompanyApplication extends Model
     public function claimedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'staff_id');
+    }
+
+    /**
+     * Scope a query to only include open (unhandled) applications.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeOpenApplications(Builder $query): Builder
+    {
+        return $query->whereIn('status', ['new', 'in progress']);
     }
 }
