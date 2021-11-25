@@ -125,21 +125,13 @@
 
             <div class="col-md-3">
                 @auth
-                    @if(Auth::user()->company_id && Auth::user()->company_id !== $company->id)
-                        <x-alert type="danger">
-                            You are already in a VTC.
-                        </x-alert>
-                    @endif
-
-                    @if(!$company->recruitment_open)
-                        <x-alert type="danger">
-                            This VTC is not recruiting right now.
-                        </x-alert>
-                    @endif
-
-                    @can('apply', $company)
+                    @can('create', [App\Models\CompanyApplication::class, $company])
                         <a href="#" class="btn btn-success w-100 margin-bottom-10" data-toggle="modal"
                            data-target="#form-apply">Apply Now!</a>
+                    @else
+                        <x-alert type="danger">
+                            {{ Gate::inspect('create', [App\Models\CompanyApplication::class, $company])->message() }}
+                        </x-alert>
                     @endcan
 
                     @can('leave', $company)
@@ -227,6 +219,34 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default ml-3" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-danger">Leave</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endcan
+
+    @can('create', [App\Models\CompanyApplication::class, $company])
+        <div class="modal fade" id="form-apply" tabindex="-1" role="dialog"
+             aria-labelledby="Apply" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Are you sure you want to apply at {{ $company->name }}?</h3>
+                    </div>
+
+                    <form action="{{ route('vtc.applications.store', $company) }}" method="POST">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="form-group">
+                                <label for="description">Talk a bit about yourself:</label>
+                                <textarea id="description" name="description" class="form-control" rows="5"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success" value="apply">Apply</button>
                         </div>
                     </form>
                 </div>
