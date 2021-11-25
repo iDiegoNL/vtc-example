@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -71,5 +72,19 @@ class Company extends Model
     public function applications(): HasMany
     {
         return $this->hasMany(CompanyApplication::class);
+    }
+
+    /**
+     * Check if the company is owned by the given user.
+     * If no user is given, it uses the authenticated user (if any).
+     */
+    public function isOwnedByUser(User $user = null): bool
+    {
+        // Use the authenticated user if none is given
+        if ($user === null) {
+            $user = Auth::user();
+        }
+
+        return $this->owner_id === $user?->id;
     }
 }
