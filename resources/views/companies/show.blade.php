@@ -2,18 +2,6 @@
 
 @extends('layouts.app')
 
-@push('scripts-top')
-    @isset($company->cover_image_path)
-        <style>
-            .breadcrumbs-v1 {
-                height: 350px;
-                background: url({{ asset($company->cover_image_path) }}) center no-repeat !important;
-                background-size: cover !important;
-            }
-        </style>
-    @endisset
-@endpush
-
 @section('title', "Virtual Trucking Company - $company->name")
 
 @section('breadcrumbs')
@@ -23,32 +11,7 @@
 @endsection
 
 @section('content')
-    <div class="breadcrumbs-v1 text-center hidden-sm hidden-xs">
-        <div class="container" style="position: relative; top: 150px; left: -10px; z-index: 1">
-            <div class="row">
-                <div class="col-lg-2 col-md-3">
-                    <a href="{{ route('vtc.show', $company->id) }}">
-                        <img src="{{ asset($company->logo_path) }}" alt="{{ $company->name }}'s logo"
-                             class="{{ $company->logo_border ? 'rounded-circle' : 'rounded-circle-no-border' }} animated fadeInLeft dropshadow">
-                    </a>
-                </div>
-                <div class="col-lg-10 col-md-9">
-                    <div class="text-left animated fadeInLeft dropshadow">
-                        <h2 style="font-size: 30px; display: inline-block; margin: 3px 0; padding: .7rem; background: rgba(0, 0, 0, 0.7)"
-                            class="break-all">
-                            {{ $company->name }}
-                        </h2>
-                        <br>
-                        <h4 style="font-size: 16px; display: inline-block; margin-top: 2px; padding: .7rem; background: rgba(0, 0, 0, 0.7)">
-                            {{ $company->slogan }}
-                        </h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div style="margin-top: 60px"></div>
+    <x-company-header :company="$company"/>
 
     <div class="container">
         @if ($errors->any())
@@ -65,6 +28,61 @@
         @endif
         <div class="row">
             <div class="col-md-3">
+
+                <div>
+                    @can('update', $company)
+                        <h2 class="heading-sm"><i class="fas fa-cogs"></i> VTC Settings</h2>
+                    @endif
+                    <ul class="list-group sidebar-nav-v1">
+                        @can('update', $company)
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="fas fa-fw fa-edit fa-fw"></i> Edit VTC
+                                </a>
+                            </li>
+                        @endcan
+                        @can('update', $company)
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="fas fa-calendar-alt fa-fw"></i> Events
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="far fa-fw fa-newspaper fa-fw"></i> News Post
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <span
+                                    class="badge {{ $company->applications()->openApplications()->exists() ? 'badge-orange' : 'badge-green' }} rounded-2x pull-right pb-1">
+                                    {{ $company->applications()->openApplications()->count() }}
+                                </span>
+                                <a href="{{ route('vtc.applications.index', $company->id) }}">
+                                    <i class="fas fa-fw fa-users fa-fw"></i> All Applications
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="far fa-fw fa-clipboard-list fa-fw"></i> Blacklist
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <i class="fal fa-images fa-fw"></i> Gallery
+                                </a>
+                            </li>
+                        @endcan
+                        @if(Auth::check() && Auth::user()->cannot('viewAny', [App\Models\CompanyApplication::class, $company]))
+                            <li class="list-group-item">
+                                <span class="badge badge-green rounded-2x pull-right pb-1">0</span>
+                                <a href="#">
+                                    <i class="fas fa-fw fa-users fa-fw"></i> View my applications
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                    <hr>
+                </div>
 
                 <div class="profile-body">
                     <div class="panel panel-profile p-1">
