@@ -51,6 +51,18 @@
     <div style="margin-top: 60px"></div>
 
     <div class="container">
+        @if ($errors->any())
+            <x-alert type="danger">
+                Fix the errors below and try again
+                <br>
+                <br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li class="autolink">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </x-alert>
+        @endif
         <div class="row">
             <div class="col-md-3">
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompanyApplicationController;
 use App\Http\Controllers\CompanyResourceController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,13 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 Route::resource('vtc', CompanyResourceController::class)->parameters(['vtc' => 'company']);
 Route::prefix('vtc/{company}')->name('vtc.')->group(function () {
-    Route::post('leave', [CompanyResourceController::class, 'leave'])->middleware('auth')->name('leave');
+    Route::post('leave', [CompanyResourceController::class, 'leave'])
+        ->middleware('auth')
+        ->name('leave');
 });
+
+Route::resource('vtc.applications', CompanyApplicationController::class)
+    ->parameters(['vtc' => 'company'])
+    ->except([
+        'create', 'edit', 'destroy'
+    ]);
