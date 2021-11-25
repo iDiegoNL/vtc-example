@@ -52,28 +52,6 @@ class CompanyPolicy
     }
 
     /**
-     * Determine whether the user can apply to the company.
-     *
-     * @param User $user
-     * @param Company $company
-     * @return Response
-     */
-    public function apply(User $user, Company $company): Response
-    {
-        // Check if the company is recruiting
-        if (!$company->recruitment_open) {
-            return Response::deny('This company is currently not recruiting.');
-        }
-
-        // Check if the user is already in a company
-        if ($user->company_id) {
-            return Response::deny('You are already in a company.');
-        }
-
-        return Response::allow();
-    }
-
-    /**
      * Determine whether the user can create a company.
      *
      * @param User $user
