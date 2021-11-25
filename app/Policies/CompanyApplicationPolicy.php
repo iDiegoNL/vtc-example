@@ -54,6 +54,11 @@ class CompanyApplicationPolicy
             return Response::deny('You are already in a company.');
         }
 
+        // Check if the user has any open applications
+        if ($user->companyApplications()->openApplications()->exists()) {
+            return Response::deny('You already have an unhandled application for a company.');
+        }
+
         return Response::allow();
     }
 
