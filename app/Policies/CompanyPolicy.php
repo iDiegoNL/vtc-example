@@ -116,7 +116,7 @@ class CompanyPolicy
         }
 
         // Check if the user is the owner of the company
-        if ($company->owner_id === $user->id) {
+        if ($company->isOwnedByUser()) {
             return Response::deny('You cannot leave a company you are the owner of.');
         }
 
