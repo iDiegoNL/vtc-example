@@ -9,7 +9,7 @@ use App\Models\Company;
 use App\Models\CompanyApplication;
 use Illuminate\Http\RedirectResponse;
 
-class CompanyApplicationController extends Controller
+class CompanyApplicationResourceController extends Controller
 {
     private CreateCompanyApplicationAction $createCompanyApplicationAction;
 

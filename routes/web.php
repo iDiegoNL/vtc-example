@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CompanyApplicationController;
+use App\Http\Controllers\CompanyApplicationResourceController;
 use App\Http\Controllers\CompanyResourceController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,7 +26,7 @@ Route::prefix('vtc/{company}')->name('vtc.')->group(function () {
         ->name('leave');
 });
 
-Route::resource('vtc.applications', CompanyApplicationController::class)
+Route::resource('vtc.applications', CompanyApplicationResourceController::class)
     ->parameters(['vtc' => 'company'])
     ->except([
         'create', 'edit', 'destroy'
