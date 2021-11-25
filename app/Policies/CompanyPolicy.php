@@ -76,7 +76,12 @@ class CompanyPolicy
      */
     public function update(User $user, Company $company): Response
     {
-        //
+        // Check if the user owns the company
+        if ($company->isOwnedByUser()) {
+            return Response::allow();
+        }
+
+        return Response::deny('You do not have permission to edit this company.');
     }
 
     /**
@@ -88,7 +93,12 @@ class CompanyPolicy
      */
     public function delete(User $user, Company $company): Response
     {
-        //
+        // Check if the user owns the company
+        if ($company->isOwnedByUser()) {
+            return Response::allow();
+        }
+
+        return Response::deny('You do not have permission to delete this company.');
     }
 
     /**
