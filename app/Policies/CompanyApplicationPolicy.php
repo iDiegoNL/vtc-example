@@ -16,11 +16,16 @@ class CompanyApplicationPolicy
      * Determine whether the user can view any company applications.
      *
      * @param User $user
+     * @param Company $company
      * @return Response
      */
-    public function viewAny(User $user): Response
+    public function viewAny(User $user, Company $company): Response
     {
-        //
+        if ($company->isOwnedByUser()) {
+            return Response::allow();
+        }
+
+        return Response::deny('You do not have permission to view the applications of this company.');
     }
 
     /**
@@ -32,7 +37,17 @@ class CompanyApplicationPolicy
      */
     public function view(User $user, CompanyApplication $companyApplication): Response
     {
-        //
+        // Check if the user created the application
+        if ($user->id === $companyApplication->applicant_id) {
+            return Response::allow();
+        }
+
+        // Check if the user owns the company
+        if ($companyApplication->company->isOwnedByUser()) {
+            return Response::allow();
+        }
+
+        return Response::deny('You do not have permission to view this application.');
     }
 
     /**
@@ -71,6 +86,11 @@ class CompanyApplicationPolicy
      */
     public function update(User $user, CompanyApplication $companyApplication): Response
     {
-        //
+        // Check if the user owns the company
+        if ($companyApplication->company->isOwnedByUser()) {
+            return Response::allow();
+        }
+
+        return Response::deny('You do not have permission to edit this application.');
     }
 }
