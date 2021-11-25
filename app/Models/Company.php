@@ -64,4 +64,12 @@ class Company extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    /**
+     * Get the applications for the company.
+     */
+    public function applications(): HasMany
+    {
+        return $this->hasMany(CompanyApplication::class);
+    }
 }

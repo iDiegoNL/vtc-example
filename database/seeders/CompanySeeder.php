@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Company;
+use App\Models\CompanyApplication;
 use Illuminate\Database\Seeder;
 
 class CompanySeeder extends Seeder
@@ -14,6 +15,8 @@ class CompanySeeder extends Seeder
      */
     public function run()
     {
-        Company::factory(10)->create();
+        Company::factory(10)
+            ->has(CompanyApplication::factory()->count(10), 'applications') // Give the company 10 applications
+            ->create();
     }
 }

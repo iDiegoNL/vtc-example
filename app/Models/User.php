@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -49,5 +50,21 @@ class User extends Authenticatable
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Get the user's company applications.
+     */
+    public function companyApplications(): HasMany
+    {
+        return $this->hasMany(CompanyApplication::class, 'applicant_id');
+    }
+
+    /**
+     * Get the user's claimed company applications.
+     */
+    public function claimedCompanyApplications(): HasMany
+    {
+        return $this->hasMany(CompanyApplication::class, 'staff_id');
     }
 }
