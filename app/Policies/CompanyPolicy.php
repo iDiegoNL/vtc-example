@@ -44,10 +44,15 @@ class CompanyPolicy
      *
      * @param User|null $user
      * @param Company $company
-     * @return bool
+     * @return Response|bool
      */
-    public function viewMembers(?User $user, Company $company): bool
+    public function viewMembers(?User $user, Company $company): Response|bool
     {
+        // Check if the user owns the company
+        if ($company->isOwnedByUser()) {
+            return Response::allow();
+        }
+
         return $company->display_members;
     }
 
