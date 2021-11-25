@@ -21,6 +21,16 @@ class CompanyApplication extends Model
         'staff_id',
         'description',
         'status',
+        'closed_at'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'closed_at' => 'datetime',
     ];
 
     /**

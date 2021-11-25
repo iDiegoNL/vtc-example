@@ -29,6 +29,7 @@ class CreateCompanyApplicationsTable extends Migration
                 ->cascadeOnUpdate(); // Update the primary key if changed
             $table->longText('description');
             $table->enum('status', ['new', 'in progress', 'hired', 'declined', 'left', 'cancelled', 'fired'])->default('new');
+            $table->dateTime('closed_at')->nullable();
             $table->timestamps();
         });
     }
