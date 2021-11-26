@@ -27,7 +27,10 @@ Route::prefix('vtc/{company}')->name('vtc.')->group(function () {
 });
 
 Route::resource('vtc.applications', CompanyApplicationResourceController::class)
-    ->parameters(['vtc' => 'company'])
+    ->parameters([
+        'vtc' => 'company',
+        'applications' => 'companyApplication',
+    ])
     ->except([
         'create', 'edit', 'destroy'
     ]);

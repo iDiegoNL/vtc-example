@@ -7,6 +7,8 @@ use App\Http\Requests\StoreCompanyApplicationRequest;
 use App\Http\Requests\UpdateCompanyApplicationRequest;
 use App\Models\Company;
 use App\Models\CompanyApplication;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class CompanyApplicationResourceController extends Controller
@@ -26,11 +28,17 @@ class CompanyApplicationResourceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Company $company
+     * @return View
+     * @throws AuthorizationException
      */
-    public function index(Company $company)
+    public function index(Company $company): View
     {
-        //
+        $this->authorize('viewAny', [CompanyApplication::class, $company]);
+
+        $applications = $company->applications()->paginate(25);
+
+        return view('companies.applications.index', ['company' => $company, 'applications' => $applications]);
     }
 
     /**
@@ -40,7 +48,7 @@ class CompanyApplicationResourceController extends Controller
      * @param Company $company
      * @return RedirectResponse
      */
-    public function store(StoreCompanyApplicationRequest $request, Company $company)
+    public function store(StoreCompanyApplicationRequest $request, Company $company): RedirectResponse
     {
         $application = $this->createCompanyApplicationAction->execute($request->user(), $company, $request->validated());
 
