@@ -36,7 +36,15 @@ class CompanyApplicationResourceController extends Controller
     {
         $this->authorize('viewAny', [CompanyApplication::class, $company]);
 
-        $applications = $company->applications()->paginate(25);
+        // Query all applications for the given company if the authenticated user owns it.
+        // Otherwise, just query the authenticated user's applications for this company.
+        if ($company->isOwnedByUser()) {
+            $applications = $company->applications()->paginate(25);
+        } else {
+            $applications = $company->applications()
+                ->whereRelation('applicant', 'id', Auth::id())
+                ->paginate(25);
+        }
 
         return view('companies.applications.index', ['company' => $company, 'applications' => $applications]);
     }

@@ -74,8 +74,7 @@
                         @endcan
                         @if(Auth::check() && Auth::user()->cannot('viewAny', [App\Models\CompanyApplication::class, $company]))
                             <li class="list-group-item">
-                                <span class="badge badge-green rounded-2x pull-right pb-1">0</span>
-                                <a href="#">
+                                <a href="{{ route('vtc.applications.index', $company->id) }}">
                                     <i class="fas fa-fw fa-users fa-fw"></i> View my applications
                                 </a>
                             </li>

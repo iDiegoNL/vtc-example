@@ -21,7 +21,13 @@ class CompanyApplicationPolicy
      */
     public function viewAny(User $user, Company $company): Response
     {
+        // Check if the user owns the company
         if ($company->isOwnedByUser()) {
+            return Response::allow();
+        }
+
+        // Check if the user has an application attached to the company
+        if ($user->companyApplications()->where('company_id', $company->id)->exists()) {
             return Response::allow();
         }
 
@@ -87,10 +93,15 @@ class CompanyApplicationPolicy
     public function update(User $user, CompanyApplication $companyApplication): Response
     {
         // Check if the user owns the company
-        if ($companyApplication->company->isOwnedByUser()) {
-            return Response::allow();
+        if (!$companyApplication->company->isOwnedByUser()) {
+            return Response::deny('You cannot update applications of a company that you do not own.');
         }
 
-        return Response::deny('You do not have permission to edit this application.');
+        // Check if the user claimed the application
+        if ($user->id !== $companyApplication->staff_id) {
+            return Response::deny('You must claim this application before you can manage it.');
+        }
+
+        return Response::allow();
     }
 }
