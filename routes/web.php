@@ -26,7 +26,12 @@ Route::prefix('vtc/{company}')->name('vtc.')->group(function () {
         ->name('leave');
 });
 
+Route::prefix('vtc/{company}/applications/{companyApplication}')->name('vtc.applications.')->middleware('auth')->group(function () {
+    Route::post('assign', [CompanyApplicationResourceController::class, 'assign'])->name('assign');
+});
+
 Route::resource('vtc.applications', CompanyApplicationResourceController::class)
+    ->middleware('auth')
     ->parameters([
         'vtc' => 'company',
         'applications' => 'companyApplication',

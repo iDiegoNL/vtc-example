@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CompanyApplication\AssignCompanyApplicationAction;
 use App\Actions\CompanyApplication\CreateCompanyApplicationAction;
+use App\Http\Requests\AssignCompanyApplicationRequest;
 use App\Http\Requests\StoreCompanyApplicationRequest;
 use App\Http\Requests\UpdateCompanyApplicationRequest;
 use App\Models\Company;
@@ -10,23 +12,31 @@ use App\Models\CompanyApplication;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyApplicationResourceController extends Controller
 {
     private CreateCompanyApplicationAction $createCompanyApplicationAction;
+    private AssignCompanyApplicationAction $assignCompanyApplicationAction;
 
     /**
      * Create the controller instance.
      *
      * @return void
      */
-    public function __construct(CreateCompanyApplicationAction $createCompanyApplicationAction)
+    public function __construct(
+        CreateCompanyApplicationAction $createCompanyApplicationAction,
+        AssignCompanyApplicationAction $assignCompanyApplicationAction,
+    )
     {
+        $this->middleware('auth');
+
         $this->createCompanyApplicationAction = $createCompanyApplicationAction;
+        $this->assignCompanyApplicationAction = $assignCompanyApplicationAction;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the company applications.
      *
      * @param Company $company
      * @return View
@@ -50,7 +60,7 @@ class CompanyApplicationResourceController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created company application in storage.
      *
      * @param StoreCompanyApplicationRequest $request
      * @param Company $company
@@ -64,25 +74,18 @@ class CompanyApplicationResourceController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified company application.
      *
+     * @param Company $company
      * @param CompanyApplication $companyApplication
-     * @return \Illuminate\Http\Response
+     * @return View
+     * @throws AuthorizationException
      */
-    public function show(CompanyApplication $companyApplication)
+    public function show(Company $company, CompanyApplication $companyApplication): View
     {
-        //
-    }
+        $this->authorize('view', $companyApplication);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param CompanyApplication $companyApplication
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CompanyApplication $companyApplication)
-    {
-        //
+        return view('companies.applications.show', ['company' => $company, 'application' => $companyApplication]);
     }
 
     /**
@@ -98,13 +101,17 @@ class CompanyApplicationResourceController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * (Re)assign the specified company application.
      *
+     * @param AssignCompanyApplicationRequest $request
+     * @param Company $company
      * @param CompanyApplication $companyApplication
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function destroy(CompanyApplication $companyApplication)
+    public function assign(AssignCompanyApplicationRequest $request, Company $company, CompanyApplication $companyApplication): RedirectResponse
     {
-        //
+        $this->assignCompanyApplicationAction->execute($companyApplication, $request->user());
+
+        return redirect()->back();
     }
 }

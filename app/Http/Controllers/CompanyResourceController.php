@@ -24,6 +24,15 @@ class CompanyResourceController extends Controller
      */
     public function __construct(LeaveCompanyAction $leaveCompanyAction)
     {
+        $this->middleware('auth')->only([
+            'create',
+            'store',
+            'edit',
+            'update',
+            'destroy',
+            'leave',
+        ]);
+
         // Attach the CompanyPolicy methods to the controller resource methods
         $this->authorizeResource(Company::class, 'company');
 

@@ -104,4 +104,21 @@ class CompanyApplicationPolicy
 
         return Response::allow();
     }
+
+    /**
+     * Determine whether the user can (re)assign the company application.
+     *
+     * @param User $user
+     * @param CompanyApplication $companyApplication
+     * @return Response
+     */
+    public function assign(User $user, CompanyApplication $companyApplication): Response
+    {
+        // Check if the user owns the company
+        if (!$companyApplication->company->isOwnedByUser()) {
+            return Response::deny('You cannot assign an application of a company that you do not own.');
+        }
+
+        return Response::allow();
+    }
 }
