@@ -121,4 +121,31 @@ class CompanyApplicationPolicy
 
         return Response::allow();
     }
+
+    /**
+     * Determine whether the user can comment on the company application.
+     *
+     * @param User $user
+     * @param CompanyApplication $companyApplication
+     * @return Response
+     */
+    public function comment(User $user, CompanyApplication $companyApplication): Response
+    {
+        // Check if the application is handled
+        if ($companyApplication->isHandled()) {
+            return Response::deny('This application is already handled.');
+        }
+
+        // Check if the user is the applicant
+        if ($user->id === $companyApplication->applicant_id) {
+            return Response::allow();
+        }
+
+        // Check if the user has claimed the application
+        if ($user->id !== $companyApplication->staff_id) {
+            return Response::deny('You must claim this application before you can comment on it.');
+        }
+
+        return Response::allow();
+    }
 }

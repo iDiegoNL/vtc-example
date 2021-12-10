@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\CompanyApplication\AssignCompanyApplicationAction;
 use App\Actions\CompanyApplication\CreateCompanyApplicationAction;
+use App\Actions\CompanyApplication\SubmitCompanyApplicationCommentAction;
 use App\Http\Requests\AssignCompanyApplicationRequest;
+use App\Http\Requests\StoreCompanyApplicationCommentRequest;
 use App\Http\Requests\StoreCompanyApplicationRequest;
 use App\Http\Requests\UpdateCompanyApplicationRequest;
 use App\Models\Company;
@@ -18,6 +20,7 @@ class CompanyApplicationResourceController extends Controller
 {
     private CreateCompanyApplicationAction $createCompanyApplicationAction;
     private AssignCompanyApplicationAction $assignCompanyApplicationAction;
+    private SubmitCompanyApplicationCommentAction $submitCompanyApplicationCommentAction;
 
     /**
      * Create the controller instance.
@@ -25,14 +28,16 @@ class CompanyApplicationResourceController extends Controller
      * @return void
      */
     public function __construct(
-        CreateCompanyApplicationAction $createCompanyApplicationAction,
-        AssignCompanyApplicationAction $assignCompanyApplicationAction,
+        CreateCompanyApplicationAction        $createCompanyApplicationAction,
+        AssignCompanyApplicationAction        $assignCompanyApplicationAction,
+        SubmitCompanyApplicationCommentAction $submitCompanyApplicationCommentAction
     )
     {
         $this->middleware('auth');
 
         $this->createCompanyApplicationAction = $createCompanyApplicationAction;
         $this->assignCompanyApplicationAction = $assignCompanyApplicationAction;
+        $this->submitCompanyApplicationCommentAction = $submitCompanyApplicationCommentAction;
     }
 
     /**
@@ -86,6 +91,8 @@ class CompanyApplicationResourceController extends Controller
         $companyApplication->load([
             'applicant',
             'claimedBy',
+            'comments',
+            'comments.user'
         ]);
 
         $this->authorize('view', $companyApplication);
@@ -116,6 +123,21 @@ class CompanyApplicationResourceController extends Controller
     public function assign(AssignCompanyApplicationRequest $request, Company $company, CompanyApplication $companyApplication): RedirectResponse
     {
         $this->assignCompanyApplicationAction->execute($companyApplication, $request->user());
+
+        return redirect()->back();
+    }
+
+    /**
+     * Comment on the specified company application.
+     *
+     * @param StoreCompanyApplicationCommentRequest $request
+     * @param Company $company
+     * @param CompanyApplication $companyApplication
+     * @return RedirectResponse
+     */
+    public function comment(StoreCompanyApplicationCommentRequest $request, Company $company, CompanyApplication $companyApplication): RedirectResponse
+    {
+        $this->submitCompanyApplicationCommentAction->execute($companyApplication, $request->user(), $request->validated()['comment']);
 
         return redirect()->back();
     }

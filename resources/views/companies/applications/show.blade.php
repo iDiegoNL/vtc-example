@@ -129,13 +129,35 @@
                 {!! nl2br(e(ucwords($application->description, "\n"))) !!}
             </p>
         </div>
-        @can('update', $application)
+
+        @foreach($application->comments as $comment)
+            <div class="comment">
+                <h3>
+                <span class="badge" style="background-color:#8bc34a; font-weight: bold;">
+                    Player
+                </span>
+                    <a href="#" style="color: #8bc34a" class="">{{ $comment->user->name }}</a>
+                    at {{ $comment->created_at->format('d M Y H:i T') }}
+                </h3>
+                <p class="autolink">
+                    {{-- First ucword every newline --}}
+                    {{-- Then escape any code in the var with e: https://laravel.com/docs/8.x/helpers#method-e --}}
+                    {{-- Then convert newlines to <br>s with nl2br --}}
+                    {{-- Then display that data unescaped (it's safe because of the 2nd comment) --}}
+                    {!! nl2br(e(ucwords($comment->comment, "\n"))) !!}
+                </p>
+            </div>
+        @endforeach
+
+        @can('comment', $application)
             <hr>
-            <form action="" method="post">
+            <form action="{{ route('vtc.applications.comment', [$company, $application]) }}" method="post">
                 @csrf
                 <label for="comment">Comment</label>
                 <textarea id="comment" class="form-control" rows="15" name="comment"></textarea>
-                <button type="submit" name="action" value="comment" class="btn btn-success my-3">Submit comment</button>
+                <button type="submit" name="action" value="comment" class="btn btn-success my-3">
+                    Submit comment
+                </button>
             </form>
         @endcan
     </div>

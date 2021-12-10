@@ -28,6 +28,7 @@ Route::prefix('vtc/{company}')->name('vtc.')->group(function () {
 
 Route::prefix('vtc/{company}/applications/{companyApplication}')->name('vtc.applications.')->middleware('auth')->group(function () {
     Route::post('assign', [CompanyApplicationResourceController::class, 'assign'])->name('assign');
+    Route::post('comment', [CompanyApplicationResourceController::class, 'comment'])->name('comment');
 });
 
 Route::resource('vtc.applications', CompanyApplicationResourceController::class)

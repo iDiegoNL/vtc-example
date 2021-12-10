@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class CompanyApplication extends Model
 {
@@ -58,6 +59,14 @@ class CompanyApplication extends Model
     }
 
     /**
+     * Get all of the application's comments.
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    /**
      * Scope a query to only include open (unhandled) applications.
      *
      * @param Builder $query
@@ -66,5 +75,15 @@ class CompanyApplication extends Model
     public function scopeOpenApplications(Builder $query): Builder
     {
         return $query->whereIn('status', ['new', 'in progress']);
+    }
+
+    /**
+     * Check if the chosen application is handled (not new or in progress).
+     *
+     * @return bool
+     */
+    public function isHandled(): bool
+    {
+        return !in_array($this->status, ['new', 'in progress']);
     }
 }
