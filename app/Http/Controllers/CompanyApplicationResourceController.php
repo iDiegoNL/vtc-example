@@ -83,6 +83,11 @@ class CompanyApplicationResourceController extends Controller
      */
     public function show(Company $company, CompanyApplication $companyApplication): View
     {
+        $companyApplication->load([
+            'applicant',
+            'claimedBy',
+        ]);
+
         $this->authorize('view', $companyApplication);
 
         return view('companies.applications.show', ['company' => $company, 'application' => $companyApplication]);
