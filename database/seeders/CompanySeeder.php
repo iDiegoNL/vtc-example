@@ -16,7 +16,7 @@ class CompanySeeder extends Seeder
     public function run()
     {
         Company::factory(10)
-            ->has(CompanyApplication::factory()->count(10), 'applications') // Give the company 10 applications
+            ->has(CompanyApplication::factory()->count(50), 'applications') // Give the company 50 applications
             ->create();
     }
 }
