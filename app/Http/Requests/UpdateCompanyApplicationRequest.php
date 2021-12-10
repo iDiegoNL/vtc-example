@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCompanyApplicationRequest extends FormRequest
 {
@@ -11,9 +12,9 @@ class UpdateCompanyApplicationRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return $this->user()->can('update', $this->companyApplication);
     }
 
     /**
@@ -21,10 +22,10 @@ class UpdateCompanyApplicationRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'status' => ['required', 'string', Rule::in(['in progress', 'hired', 'declined'])],
         ];
     }
 }

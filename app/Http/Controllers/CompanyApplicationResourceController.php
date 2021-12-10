@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\CompanyApplication\AssignCompanyApplicationAction;
 use App\Actions\CompanyApplication\CreateCompanyApplicationAction;
 use App\Actions\CompanyApplication\SubmitCompanyApplicationCommentAction;
+use App\Actions\CompanyApplication\UpdateCompanyApplicationStatus;
 use App\Http\Requests\AssignCompanyApplicationRequest;
 use App\Http\Requests\StoreCompanyApplicationCommentRequest;
 use App\Http\Requests\StoreCompanyApplicationRequest;
@@ -15,12 +16,14 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class CompanyApplicationResourceController extends Controller
 {
     private CreateCompanyApplicationAction $createCompanyApplicationAction;
     private AssignCompanyApplicationAction $assignCompanyApplicationAction;
     private SubmitCompanyApplicationCommentAction $submitCompanyApplicationCommentAction;
+    private UpdateCompanyApplicationStatus $updateCompanyApplicationStatus;
 
     /**
      * Create the controller instance.
@@ -30,7 +33,8 @@ class CompanyApplicationResourceController extends Controller
     public function __construct(
         CreateCompanyApplicationAction        $createCompanyApplicationAction,
         AssignCompanyApplicationAction        $assignCompanyApplicationAction,
-        SubmitCompanyApplicationCommentAction $submitCompanyApplicationCommentAction
+        SubmitCompanyApplicationCommentAction $submitCompanyApplicationCommentAction,
+        UpdateCompanyApplicationStatus        $updateCompanyApplicationStatus,
     )
     {
         $this->middleware('auth');
@@ -38,6 +42,7 @@ class CompanyApplicationResourceController extends Controller
         $this->createCompanyApplicationAction = $createCompanyApplicationAction;
         $this->assignCompanyApplicationAction = $assignCompanyApplicationAction;
         $this->submitCompanyApplicationCommentAction = $submitCompanyApplicationCommentAction;
+        $this->updateCompanyApplicationStatus = $updateCompanyApplicationStatus;
     }
 
     /**
@@ -101,15 +106,20 @@ class CompanyApplicationResourceController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified company application status.
      *
      * @param UpdateCompanyApplicationRequest $request
+     * @param Company $company
      * @param CompanyApplication $companyApplication
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
+     * @throws Throwable
      */
-    public function update(UpdateCompanyApplicationRequest $request, CompanyApplication $companyApplication)
+    public function update(UpdateCompanyApplicationRequest $request, Company $company, CompanyApplication $companyApplication): RedirectResponse
     {
-        //
+        // Update the application status
+        $this->updateCompanyApplicationStatus->execute($companyApplication, $request->validated()['status']);
+
+        return redirect()->back();
     }
 
     /**

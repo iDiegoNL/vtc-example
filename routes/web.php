@@ -38,5 +38,7 @@ Route::resource('vtc.applications', CompanyApplicationResourceController::class)
         'applications' => 'companyApplication',
     ])
     ->except([
-        'create', 'edit', 'destroy'
+        'create',
+        'edit',
+        'destroy',
     ]);

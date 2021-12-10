@@ -102,6 +102,11 @@ class CompanyApplicationPolicy
             return Response::deny('You must claim this application before you can manage it.');
         }
 
+        // Check if the application is handled
+        if ($companyApplication->isHandled()) {
+            return Response::deny('You cannot update a handled application.');
+        }
+
         return Response::allow();
     }
 
@@ -117,6 +122,11 @@ class CompanyApplicationPolicy
         // Check if the user owns the company
         if (!$companyApplication->company->isOwnedByUser()) {
             return Response::deny('You cannot assign an application of a company that you do not own.');
+        }
+
+        // Check if the application is handled
+        if ($companyApplication->isHandled()) {
+            return Response::deny('You cannot assign a handled application.');
         }
 
         return Response::allow();

@@ -48,7 +48,7 @@
                 <td>Claimed by</td>
                 <td>
                     @if($application->claimedBy()->exists())
-                        <a href="#" style="color: #00e5ff" target="_blank"
+                        <a href="#" style="color: #8bc34a" target="_blank"
                            rel="noreferrer nofollow noopener">{{ $application->claimedBy->name }}</a>
                     @else
                         N/A
@@ -226,6 +226,69 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="in-progress-recruitment" tabindex="-1" role="dialog" aria-labelledby="In Progress Application"
+             aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <form class="modal-content" action="{{ route('vtc.applications.update', [$company, $application]) }}" method="post">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="status" value="in progress">
+                    <div class="modal-header">
+                        <h4 class="margin-bottom-0">Change application status to in progress</h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure that you want to change this application status to in progress?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal fade" id="decline-recruitment" tabindex="-1" role="dialog" aria-labelledby="Decline Application"
+             aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <form class="modal-content" action="{{ route('vtc.applications.update', [$company, $application]) }}" method="post">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="status" value="declined">
+                    <div class="modal-header">
+                        <h4 class="margin-bottom-0">Decline Applicant</h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure that you want to deny this application?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Deny</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal fade" id="hire-recruitment" tabindex="-1" role="dialog" aria-labelledby="Decline Application"
+             aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <form class="modal-content" action="{{ route('vtc.applications.update', [$company, $application]) }}" method="post">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="status" value="hired">
+                    <div class="modal-header">
+                        <h4 class="margin-bottom-0">Hire Applicant</h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure that you want to hire this applicant?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Hire</button>
+                    </div>
+                </form>
             </div>
         </div>
     @endcan
