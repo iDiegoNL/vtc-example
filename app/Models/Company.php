@@ -87,4 +87,18 @@ class Company extends Model
 
         return $this->owner_id === $user?->id;
     }
+
+    /**
+     * Check if the user is a member of the company.
+     * If no user is given, it uses the authenticated user (if any).
+     */
+    public function isMember(User $user = null): bool
+    {
+        // Use the authenticated user if none is given
+        if ($user === null) {
+            $user = Auth::user();
+        }
+
+        return $this->id === $user?->company_id;
+    }
 }

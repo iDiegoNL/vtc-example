@@ -154,14 +154,16 @@
 
             <div class="col-md-3">
                 @auth
-                    @can('create', [App\Models\CompanyApplication::class, $company])
-                        <a href="#" class="btn btn-success w-100 margin-bottom-10" data-toggle="modal"
-                           data-target="#form-apply">Apply Now!</a>
-                    @else
-                        <x-alert type="danger">
-                            {{ Gate::inspect('create', [App\Models\CompanyApplication::class, $company])->message() }}
-                        </x-alert>
-                    @endcan
+                    @if(!$company->isMember(Auth::user()))
+                        @can('create', [App\Models\CompanyApplication::class, $company])
+                            <a href="#" class="btn btn-success w-100 margin-bottom-10" data-toggle="modal"
+                               data-target="#form-apply">Apply Now!</a>
+                        @else
+                            <x-alert type="danger">
+                                {{ Gate::inspect('create', [App\Models\CompanyApplication::class, $company])->message() }}
+                            </x-alert>
+                        @endcan
+                    @endif
 
                     @can('leave', $company)
                         <a href="#" class="btn btn-danger w-100 margin-bottom-10" data-toggle="modal"
