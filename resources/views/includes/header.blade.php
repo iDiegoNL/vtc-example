@@ -40,7 +40,7 @@
                             <li><a href="#">Feedback</a></li>
                             <li><a href="#">Recruitment</a></li>
                             <li><a href="https://truckersmp.com/support/tickets">Support</a></li>
-                            <li><a href="https://truckersmp.com/event-request">Request Event</a></li>
+                            <li><a href="{{ route('event-request.index') }}">Request Event</a></li>
                         </ul>
                     </li>
                     <li class="topbar-devider"></li>

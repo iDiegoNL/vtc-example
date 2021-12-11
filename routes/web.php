@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompanyApplicationResourceController;
 use App\Http\Controllers\CompanyResourceController;
+use App\Http\Controllers\EventRequestResourceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +40,13 @@ Route::resource('vtc.applications', CompanyApplicationResourceController::class)
     ])
     ->except([
         'create',
+        'edit',
+        'destroy',
+    ]);
+
+Route::resource('event-request', EventRequestResourceController::class)
+    ->parameter('event-request', 'eventRequest')
+    ->except([
         'edit',
         'destroy',
     ]);

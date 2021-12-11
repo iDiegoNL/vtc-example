@@ -67,4 +67,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(CompanyApplication::class, 'staff_id');
     }
+
+    /**
+     * Get the user's event requests.
+     */
+    public function eventRequests(): HasMany
+    {
+        return $this->hasMany(EventRequest::class, 'requester_id');
+    }
+
+    /**
+     * Get the user's claimed event requests.
+     */
+    public function claimedEventRequests(): HasMany
+    {
+        return $this->hasMany(EventRequest::class, 'staff_id');
+    }
 }
