@@ -41,11 +41,11 @@
                         {{ ucwords($application->status) }}
                     </span>
                     </td>
-                    <td>{{ $application->created_at->format('d M Y H:i') }}</td>
-                    <td>{{ $application->updated_at->format('d M Y H:i') }}</td>
+                    <td>{{ $application->created_at }}</td>
+                    <td>{{ $application->updated_at }}</td>
                     <td>
                         @isset($application->closed_at)
-                            {{ $application->closed_at->format('d M Y H:i') }}
+                            {{ $application->closed_at }}
                         @else
                             N/A
                         @endif

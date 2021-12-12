@@ -69,13 +69,13 @@
             </tr>
             <tr>
                 <td>Requested at</td>
-                <td>{{ $application->created_at->format('d M Y H:i T') }}</td>
+                <td>{{ $application->created_at }}</td>
             </tr>
             <tr>
                 <td>Closed</td>
                 <td>
                     @isset($application->closed_at)
-                        {{ $application->closed_at->format('d M Y H:i') }}
+                        {{ $application->closed_at }}
                     @else
                         N/A
                     @endif
@@ -119,7 +119,7 @@
                     Player
                 </span>
                 <a href="#" style="color: #8bc34a" class="">{{ $application->applicant->name }}</a>
-                at {{ $application->created_at->format('d M Y H:i T') }}
+                at {{ $application->created_at }}
             </h3>
             <p class="autolink">
                 {{-- First ucword every newline --}}
@@ -137,7 +137,7 @@
                     Player
                 </span>
                     <a href="#" style="color: #8bc34a" class="">{{ $comment->user->name }}</a>
-                    at {{ $comment->created_at->format('d M Y H:i T') }}
+                    at {{ $comment->created_at }}
                 </h3>
                 <p class="autolink">
                     {{-- First ucword every newline --}}
@@ -217,7 +217,7 @@
                             </tr>
                             <tr>
                                 <td>Member since</td>
-                                <td>{{ $application->applicant->created_at->format('d M Y H:i T') }}</td>
+                                <td>{{ $application->applicant->created_at }}</td>
                             </tr>
                             </tbody>
                         </table>

@@ -106,7 +106,7 @@
 
                             <h5>
                                 <i class="fas fa-globe-americas"></i>
-                                Created: {{ $company->created_at->format('d M Y H:i') }}
+                                Created: {{ $company->created_at }}
                             </h5>
 
                             <div class="margin-bottom-10"></div>
