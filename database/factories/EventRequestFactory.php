@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Carbon\Carbon;
+use DavidBadura\FakerMarkdownGenerator\FakerProvider as FakerMarkdownProvider;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\File;
@@ -18,6 +19,8 @@ class EventRequestFactory extends Factory
      */
     public function definition(): array
     {
+        $this->faker->addProvider(new FakerMarkdownProvider($this->faker));
+
         // Generate a random start datetime between tomorrow and 364 days from now
         $start_at = Carbon::today()->addDays(random_int(1, 364));
         // Generate a random end date 4 hours after the start datetime

@@ -32,7 +32,8 @@
         with most files already "compiled", I decided to use the "raw" version of the files here. Don't blame me, blame JM :kappa:
      --}}
 
-    @stack('scripts-top')
+        @bukStyles(true)
+        @stack('scripts-top')
 </head>
 <body class="dark">
 <div class="wrapper">
@@ -111,5 +112,6 @@
     type="text/javascript">$.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')}})</script>
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 @stack('scripts-bottom')
+@bukScripts(true)
 </body>
 </html>
