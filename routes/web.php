@@ -45,6 +45,7 @@ Route::resource('vtc.applications', CompanyApplicationResourceController::class)
     ]);
 
 Route::resource('event-request', EventRequestResourceController::class)
+    ->middleware('auth')
     ->parameter('event-request', 'eventRequest')
     ->except([
         'edit',
