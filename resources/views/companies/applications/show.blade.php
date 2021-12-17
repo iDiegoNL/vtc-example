@@ -35,7 +35,7 @@
             <tr>
                 <td>Application by</td>
                 <td>
-                    <a href="#" style="color: #8bc34a" target="_blank"
+                    <a href="#" style="color: {{ $application->applicant->roles->first()->color }}" target="_blank"
                        rel="noreferrer nofollow noopener">{{ $application->applicant->name }}</a>
                     @can('update', $application)
                         <a class="btn btn-success pull-right" data-toggle="modal" data-target="#player-info">
@@ -48,7 +48,7 @@
                 <td>Claimed by</td>
                 <td>
                     @if($application->claimedBy()->exists())
-                        <a href="#" style="color: #8bc34a" target="_blank"
+                        <a href="#" style="color: {{ $application->claimedBy->roles->first()->color }}" target="_blank"
                            rel="noreferrer nofollow noopener">{{ $application->claimedBy->name }}</a>
                     @else
                         N/A
@@ -115,10 +115,10 @@
         <h3>Comments</h3>
         <div class="comment">
             <h3>
-                <span class="badge" style="background-color:#8bc34a; font-weight: bold;">
-                    Player
+                <span class="badge" style="background-color: {{ $application->applicant->roles->first()->color }}; font-weight: bold;">
+                    {{ ucwords($application->applicant->roles->first()->name) }}
                 </span>
-                <a href="#" style="color: #8bc34a" class="">{{ $application->applicant->name }}</a>
+                <a href="#" style="color: {{ $application->applicant->roles->first()->color }}" class="">{{ $application->applicant->name }}</a>
                 at {{ $application->created_at }}
             </h3>
             <p class="autolink">

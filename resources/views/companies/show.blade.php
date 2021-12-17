@@ -112,7 +112,7 @@
                             <div class="margin-bottom-10"></div>
                             <h5>
                                 <i class="fas fa-building"></i> Owner:
-                                <a href="#">{{ $company->owner->name }}</a>
+                                <a href="#" style="color: {{ $company->owner->roles->first()->color }}">{{ $company->owner->name }}</a>
                             </h5>
 
                             <h5>

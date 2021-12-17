@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class UserFactory extends Factory
 {
@@ -34,6 +36,23 @@ class UserFactory extends Factory
             return [
                 'email_verified_at' => null,
             ];
+        });
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return self
+     */
+    public function configure(): self
+    {
+        // After creating the user, give it the player role.
+        return $this->afterCreating(function (User $user) {
+            if (Role::query()->where('name', 'player')->doesntExist()) {
+                Role::create(['name' => 'player']);
+            }
+
+            $user->assignRole('player');
         });
     }
 }

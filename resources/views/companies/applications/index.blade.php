@@ -33,7 +33,7 @@
                 <tr>
                     <td>{{ $application->id }}</td>
                     <td>
-                        <a href="#" style="color: #8bc34a" target="_blank"
+                        <a href="#" style="color: {{ $application->applicant->roles->first()->color }}" target="_blank"
                            rel="noreferrer nofollow noopener">{{ $application->applicant->name }}</a>
                     </td>
                     <td>
