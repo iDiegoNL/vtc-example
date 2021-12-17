@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Comment\CreateCommentAction;
 use App\Actions\CompanyApplication\AssignCompanyApplicationAction;
 use App\Actions\CompanyApplication\CreateCompanyApplicationAction;
-use App\Actions\CompanyApplication\SubmitCompanyApplicationCommentAction;
 use App\Actions\CompanyApplication\UpdateCompanyApplicationStatus;
 use App\Http\Requests\AssignCompanyApplicationRequest;
 use App\Http\Requests\StoreCompanyApplicationCommentRequest;
@@ -22,7 +22,7 @@ class CompanyApplicationResourceController extends Controller
 {
     private CreateCompanyApplicationAction $createCompanyApplicationAction;
     private AssignCompanyApplicationAction $assignCompanyApplicationAction;
-    private SubmitCompanyApplicationCommentAction $submitCompanyApplicationCommentAction;
+    private CreateCommentAction $createCommentAction;
     private UpdateCompanyApplicationStatus $updateCompanyApplicationStatus;
 
     /**
@@ -33,7 +33,7 @@ class CompanyApplicationResourceController extends Controller
     public function __construct(
         CreateCompanyApplicationAction        $createCompanyApplicationAction,
         AssignCompanyApplicationAction        $assignCompanyApplicationAction,
-        SubmitCompanyApplicationCommentAction $submitCompanyApplicationCommentAction,
+        CreateCommentAction $createCommentAction,
         UpdateCompanyApplicationStatus        $updateCompanyApplicationStatus,
     )
     {
@@ -41,7 +41,7 @@ class CompanyApplicationResourceController extends Controller
 
         $this->createCompanyApplicationAction = $createCompanyApplicationAction;
         $this->assignCompanyApplicationAction = $assignCompanyApplicationAction;
-        $this->submitCompanyApplicationCommentAction = $submitCompanyApplicationCommentAction;
+        $this->createCommentAction = $createCommentAction;
         $this->updateCompanyApplicationStatus = $updateCompanyApplicationStatus;
     }
 
@@ -147,7 +147,7 @@ class CompanyApplicationResourceController extends Controller
      */
     public function comment(StoreCompanyApplicationCommentRequest $request, Company $company, CompanyApplication $companyApplication): RedirectResponse
     {
-        $this->submitCompanyApplicationCommentAction->execute($companyApplication, $request->user(), $request->validated()['comment']);
+        $this->createCommentAction->execute($companyApplication, $request->user(), $request->validated()['comment']);
 
         return redirect()->back();
     }
