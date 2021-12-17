@@ -15,7 +15,9 @@ class EventRequestResourceController extends Controller
      */
     public function index(): View
     {
-        return view('event-requests.index');
+        $personalRequests = EventRequest::personal()->get();
+
+        return view('event-requests.index', ['personalRequests' => $personalRequests]);
     }
 
     /**

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class EventRequest extends Model
 {
@@ -51,5 +53,21 @@ class EventRequest extends Model
     public function staff(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Scope a query to only include user's requested events.
+     *
+     * @param Builder $query
+     * @return Builder|null
+     */
+    public function scopePersonal(Builder $query): Builder|null
+    {
+        // Return null if the user is not logged in
+        if (!Auth::check()) {
+            return null;
+        }
+
+        return $query->where('requester_id', Auth::id());
     }
 }
