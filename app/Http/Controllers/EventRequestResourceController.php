@@ -30,8 +30,8 @@ class EventRequestResourceController extends Controller
      */
     public function __construct(
         CreateEventRequestAction $createEventRequestAction,
-        ClaimEventRequestAction $claimEventRequestAction,
-        CreateCommentAction $createCommentAction,
+        ClaimEventRequestAction  $claimEventRequestAction,
+        CreateCommentAction      $createCommentAction,
         UpdateEventRequestStatus $updateEventRequestStatus
     )
     {
@@ -52,7 +52,17 @@ class EventRequestResourceController extends Controller
     {
         $personalRequests = EventRequest::personal()->get();
 
-        return view('event-requests.index', ['personalRequests' => $personalRequests]);
+        if (Auth::user()?->can('viewAny', EventRequest::class)) {
+            $eventRequests = EventRequest::query()
+                ->where('status', 'new')
+                ->latest()
+                ->get();
+        }
+
+        return view('event-requests.index', [
+            'personalRequests' => $personalRequests,
+            'eventRequests' => $eventRequests ?? [],
+        ]);
     }
 
     /**

@@ -19,7 +19,10 @@ class EventRequestPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        // Allow if the user can manage event requests
+        if ($user->can('manage event requests')) {
+            return Response::allow();
+        }
     }
 
     /**
