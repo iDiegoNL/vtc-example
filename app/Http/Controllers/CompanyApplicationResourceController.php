@@ -95,9 +95,11 @@ class CompanyApplicationResourceController extends Controller
     {
         $companyApplication->load([
             'applicant',
+            'applicant.roles',
             'claimedBy',
             'comments',
-            'comments.user'
+            'comments.user',
+            'comments.user.roles',
         ]);
 
         $this->authorize('view', $companyApplication);

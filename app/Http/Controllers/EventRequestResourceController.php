@@ -87,6 +87,15 @@ class EventRequestResourceController extends Controller
      */
     public function show(EventRequest $eventRequest): View
     {
+        $eventRequest->load([
+            'requester',
+            'requester.roles',
+            'staff',
+            'comments',
+            'comments.user',
+            'comments.user.roles',
+        ]);
+
         $this->authorize('view', $eventRequest);
 
         return view('event-requests.show', ['eventRequest' => $eventRequest]);
