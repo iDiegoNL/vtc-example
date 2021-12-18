@@ -7,39 +7,20 @@
 
         <div class="topbar">
             <ul class="loginbar pull-right">
-                <li class="hide-tiny">
-                    <a href="#">
-                        <span style="color: #72c02c;">Players Trucking:</span> 3,570
-                    </a>
-                </li>
-                <li class="topbar-devider hide-tiny"></li>
                 @guest
                     <li><a href="{{ route('register') }}">Register</a></li>
                     <li class="topbar-devider"></li>
                     <li><a href="{{ route('login') }}">Login</a></li>
                 @else
-                    <li class="hide-tiny">
-                        <a href="#">
-                            <span>Current Timezone:</span> America/New_York
-                        </a>
-                    </li>
-                    <li class="topbar-devider hide-tiny"></li>
                     <li class="hoverSelector">
                     <span class="label label-default">
                         {{ Auth::user()->name }}
                         <i class="fas fa-angle-down"></i>
                     </span>
                         <ul class="languages accountMenu hoverSelectorBlock">
-                            <li><a href="#">Profile</a></li>
                             @if(Auth::user()->company()->exists())
                                 <li><a href="{{ route('vtc.show', Auth::user()->company_id) }}">My VTC</a></li>
                             @endif
-                            <li><a href="#">Settings</a></li>
-                            <li><a href="#">Appeal Ban</a></li>
-                            <li><a href="#">Reports</a></li>
-                            <li><a href="#">Feedback</a></li>
-                            <li><a href="#">Recruitment</a></li>
-                            <li><a href="https://truckersmp.com/support/tickets">Support</a></li>
                             <li><a href="{{ route('event-request.index') }}">Request Event</a></li>
                         </ul>
                     </li>
