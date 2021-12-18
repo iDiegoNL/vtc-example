@@ -101,4 +101,17 @@ class Company extends Model
 
         return $this->id === $user?->company_id;
     }
+
+    /**
+     * Check if the user has any applications for the company.
+     */
+    public function userHasApplications(User $user = null): bool
+    {
+        // Use the authenticated user if none is given
+        if ($user === null) {
+            $user = Auth::user();
+        }
+
+        return $user->companyApplications()->where('company_id', $this->id)->exists();
+    }
 }

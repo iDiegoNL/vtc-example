@@ -72,7 +72,7 @@
                                 </a>
                             </li>
                         @endcan
-                        @if(Auth::check() && Auth::user()->cannot('viewAny', [App\Models\CompanyApplication::class, $company]))
+                        @if(Auth::check() && $company->userHasApplications())
                             <li class="list-group-item">
                                 <a href="{{ route('vtc.applications.index', $company->id) }}">
                                     <i class="fas fa-fw fa-users fa-fw"></i> View my applications
@@ -112,7 +112,8 @@
                             <div class="margin-bottom-10"></div>
                             <h5>
                                 <i class="fas fa-building"></i> Owner:
-                                <a href="#" style="color: {{ $company->owner->roles->first()->color }}">{{ $company->owner->name }}</a>
+                                <a href="#"
+                                   style="color: {{ $company->owner->roles->first()->color }}">{{ $company->owner->name }}</a>
                             </h5>
 
                             <h5>
