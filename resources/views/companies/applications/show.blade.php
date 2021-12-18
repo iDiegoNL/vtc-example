@@ -122,31 +122,12 @@
                 at {{ $application->created_at }}
             </h3>
             <p class="autolink">
-                {{-- First ucword every newline --}}
-                {{-- Then escape any code in the var with e: https://laravel.com/docs/8.x/helpers#method-e --}}
-                {{-- Then convert newlines to <br>s with nl2br --}}
-                {{-- Then display that data unescaped (it's safe because of the 2nd comment) --}}
-                {!! nl2br(e(ucwords($application->description, "\n"))) !!}
+                <x-safe-text :text="$application->description"/>
             </p>
         </div>
 
         @foreach($application->comments as $comment)
-            <div class="comment">
-                <h3>
-                <span class="badge" style="background-color:#8bc34a; font-weight: bold;">
-                    Player
-                </span>
-                    <a href="#" style="color: #8bc34a" class="">{{ $comment->user->name }}</a>
-                    at {{ $comment->created_at }}
-                </h3>
-                <p class="autolink">
-                    {{-- First ucword every newline --}}
-                    {{-- Then escape any code in the var with e: https://laravel.com/docs/8.x/helpers#method-e --}}
-                    {{-- Then convert newlines to <br>s with nl2br --}}
-                    {{-- Then display that data unescaped (it's safe because of the 2nd comment) --}}
-                    {!! nl2br(e(ucwords($comment->comment, "\n"))) !!}
-                </p>
-            </div>
+            <x-comment :comment="$comment"/>
         @endforeach
 
         @can('comment', $application)
