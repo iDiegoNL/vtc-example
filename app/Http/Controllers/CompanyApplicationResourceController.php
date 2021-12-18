@@ -59,10 +59,13 @@ class CompanyApplicationResourceController extends Controller
         // Query all applications for the given company if the authenticated user owns it.
         // Otherwise, just query the authenticated user's applications for this company.
         if ($company->isOwnedByUser()) {
-            $applications = $company->applications()->paginate(25);
+            $applications = $company->applications()
+                ->latest()
+                ->paginate(25);
         } else {
             $applications = $company->applications()
                 ->whereRelation('applicant', 'id', Auth::id())
+                ->latest()
                 ->paginate(25);
         }
 
