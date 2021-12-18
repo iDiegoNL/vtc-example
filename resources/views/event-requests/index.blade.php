@@ -34,7 +34,7 @@
                         <td>{{ $personalRequest->game }}</td>
                         <td>{{ $personalRequest->status === 'accepted' ? 'Yes' : 'No' }}</td>
                         <td>{{ ucwords($personalRequest->status) }}</td>
-                        <td>TODO</td>
+                        <td>{{ $personalRequest->latestComment->created_at ?? 'N/A' }}</td>
                         <td>{{ $personalRequest->updated_at }}</td>
                         <td>
                             <a href="{{ route('event-request.show', $personalRequest->id) }}">View</a>

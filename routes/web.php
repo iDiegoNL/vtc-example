@@ -44,6 +44,11 @@ Route::resource('vtc.applications', CompanyApplicationResourceController::class)
         'destroy',
     ]);
 
+Route::prefix('event-request/{eventRequest}')->name('event-request.')->middleware('auth')->group(function () {
+    Route::patch('claim', [EventRequestResourceController::class, 'claim'])->name('claim');
+    Route::post('comment', [EventRequestResourceController::class, 'comment'])->name('comment');
+});
+
 Route::resource('event-request', EventRequestResourceController::class)
     ->middleware('auth')
     ->parameter('event-request', 'eventRequest')
