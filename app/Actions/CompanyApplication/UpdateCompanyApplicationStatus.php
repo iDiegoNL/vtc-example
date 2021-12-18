@@ -23,6 +23,7 @@ class UpdateCompanyApplicationStatus
         // Perform any status-specific actions
         match ($status) {
             'hired' => $this->hireApplicant($application),
+            'declined', 'cancelled' => $this->closeApplication($application),
             default => null, // Do nothing if the above statuses don't match
         };
 
@@ -31,8 +32,15 @@ class UpdateCompanyApplicationStatus
 
     private function hireApplicant(CompanyApplication $application): void
     {
+        $this->closeApplication($application);
+
         $application->applicant()->update([
             'company_id' => $application->company_id,
         ]);
+    }
+
+    private function closeApplication(CompanyApplication $application): void
+    {
+        $application->update(['closed_at' => now()]);
     }
 }
