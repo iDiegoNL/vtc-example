@@ -213,10 +213,10 @@
                                                         <i class="fas fa-star text-warning" data-toggle="tooltip"
                                                            data-original-title="Owner"></i>
                                                     @endif
-                                                    <a href="#">{{ $member->name }}</a>
+                                                    <a href="#" style="color: {{ $member->roles->first()->color }}">{{ $member->name }}</a>
                                                     @if($company->owner_id === $member->id)
                                                         <div>
-                                                            <span style="color: #72c02c">Owner</span>
+                                                            <span style="color: red">Owner</span>
                                                         </div>
                                                     @endif
                                                 </div>
